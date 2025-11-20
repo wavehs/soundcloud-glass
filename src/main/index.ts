@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { authenticateSoundCloud } from './auth'
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +52,15 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.handle('auth:soundcloud', async () => {
+    try {
+      const token = await authenticateSoundCloud()
+      return { success: true, token }
+    } catch (error: any) {
+      return { success: false, error: error.message }
+    }
+  })
 
   createWindow()
 
