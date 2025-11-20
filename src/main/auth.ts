@@ -1,10 +1,13 @@
 import { BrowserWindow } from 'electron'
 
-// TODO: User must replace these with their own values or we use a prompt
-export const SOUNDCLOUD_CLIENT_ID = 'YOUR_CLIENT_ID_HERE'
-export const SOUNDCLOUD_REDIRECT_URI = 'http://localhost/callback'
+export const SOUNDCLOUD_CLIENT_ID = import.meta.env.VITE_SOUNDCLOUD_CLIENT_ID || process.env.SOUNDCLOUD_CLIENT_ID
+export const SOUNDCLOUD_REDIRECT_URI = import.meta.env.VITE_SOUNDCLOUD_REDIRECT_URI || process.env.SOUNDCLOUD_REDIRECT_URI || 'http://localhost/callback'
 
 export async function authenticateSoundCloud(): Promise<string> {
+  if (!SOUNDCLOUD_CLIENT_ID) {
+    throw new Error('SOUNDCLOUD_CLIENT_ID is not configured. Please check your .env file.')
+  }
+
   return new Promise((resolve, reject) => {
     const authWindow = new BrowserWindow({
       width: 800,
