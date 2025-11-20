@@ -33,6 +33,10 @@ function App(): React.JSX.Element {
         setUser(userData);
       } else {
         setError(result.error || 'Login failed');
+        // If the error is about missing configuration, we could show a more helpful message or modal here
+        if (result.error.includes('SOUNDCLOUD_CLIENT_ID')) {
+           // Ideally, we could open the settings or show a modal. For now, the error message is descriptive.
+        }
       }
     } catch (err: any) {
       console.error(err);
